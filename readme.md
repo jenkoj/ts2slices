@@ -1,4 +1,4 @@
-# Time Series to Image Converter for Energy Data
+# Time Series Slicer for Energy Data
 
 Notebook uses [pyts](https://pyts.readthedocs.io) to transform time series image data to:
 
