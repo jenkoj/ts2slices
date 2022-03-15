@@ -35,7 +35,7 @@ def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
     return [ts, time_stamps]
 
 
-def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndarray, sig: np.ndarray, sig_stack: np.ndarray, sig_stack_tmp: np.ndarray, time_stamp: np.ndarray, last_stamp: int, par: dict):
+def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndarray, sig: np.ndarray, sig_stack: np.ndarray, sig_stack_tmp: np.ndarray, timestamp_stack: np.ndarray, timestamp_stack_tmp: np.ndarray, time_stamp: np.ndarray, last_stamp: int, par: dict):
     """
     Appends images and ts to main array.
     In case of video, it first appends N images to temporary array, and then to main array.   
@@ -55,6 +55,7 @@ def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndar
     :return: Appended img_stack and sig_stack. 
     :return last_stamp: Updated with new last time stamp.
     """
+
     delta = time_stamp[0] - last_stamp
     last_stamp = time_stamp[-1]
 
@@ -62,8 +63,11 @@ def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndar
         # Append only if images are strictly in series.
         img_stack_tmp = np.append(img_stack_tmp, img, axis=0)
         sig_stack_tmp = np.append(sig_stack_tmp, sig, axis=0)
+        time_stamp = time_stamp[np.newaxis,...]
+        timestamp_stack_tmp = np.append(timestamp_stack_tmp, time_stamp, axis=0)
 
         if img_stack_tmp.shape[0] == par["frames"]:
+            
             # Append to main array.
             img_stack_tmp = img_stack_tmp[np.newaxis, ...]
             img_stack = np.append(img_stack, img_stack_tmp, axis=0)
@@ -71,14 +75,20 @@ def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndar
             sig_stack_tmp = sig_stack_tmp[np.newaxis, ...]
             sig_stack = np.append(sig_stack, sig_stack_tmp, axis=0)
 
+            # Add timestamp to an array
+            timestamp_stack_tmp = timestamp_stack_tmp[np.newaxis, ...]
+            timestamp_stack = np.append(timestamp_stack, timestamp_stack_tmp, axis=0)
+
             # Reset stack
+            timestamp_stack_tmp = np.zeros([0, par["ts_size"]])
             sig_stack_tmp = np.zeros([0, par["ts_size"]])
             img_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
 
     else:
         # If not in series, reset stack.
+        timestamp_stack_tmp = np.zeros([0, par["ts_size"]])
         sig_stack_tmp = np.zeros([0, par["ts_size"]])
         img_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
 
 
-    return img_stack, img_stack_tmp, sig_stack, sig_stack_tmp, last_stamp
+    return img_stack, img_stack_tmp, sig_stack, sig_stack_tmp, timestamp_stack, timestamp_stack_tmp, last_stamp
