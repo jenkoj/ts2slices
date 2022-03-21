@@ -35,14 +35,14 @@ def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
     return [ts, time_stamps]
 
 
-def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndarray, sig: np.ndarray, sig_stack: np.ndarray, sig_stack_tmp: np.ndarray, timestamp_stack: np.ndarray, timestamp_stack_tmp: np.ndarray, time_stamp: np.ndarray, last_stamp: int, par: dict):
+def append_images(state: np.ndarray, state_stack: np.ndarray, state_stack_tmp: np.ndarray, sig: np.ndarray, sig_stack: np.ndarray, sig_stack_tmp: np.ndarray, timestamp_stack: np.ndarray, timestamp_stack_tmp: np.ndarray, time_stamp: np.ndarray, last_stamp: int, par: dict):
     """
     Appends images and ts to main array.
     In case of video, it first appends N images to temporary array, and then to main array.   
 
     :param img: Current image.
-    :param img_stack: Array of all images.
-    :param img_stack_tmp: Array of N temporary images.
+    :param state_stack: Array of all images.
+    :param state_stack_tmp: Array of N temporary images.
 
     :param sig: Current power signal.
     :param sig_stack: Array of all signals. 
@@ -52,43 +52,48 @@ def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndar
     :param last_stamp: Value of last time stamp, from previous iteration.
     :param par: Dictionary of user defined parameters.
 
-    :return: Appended img_stack and sig_stack. 
+    :return: Appended state_stack and sig_stack. 
     :return last_stamp: Updated with new last time stamp.
     """
 
     delta = time_stamp[0] - last_stamp
     last_stamp = time_stamp[-1]
 
-    if delta <= par["allowed_delta_between_frames"] or img_stack_tmp.shape[0] == 0: 
-        # Append only if images are strictly in series.
-        img_stack_tmp = np.append(img_stack_tmp, img, axis=0)
-        sig_stack_tmp = np.append(sig_stack_tmp, sig, axis=0)
+    if delta <= par["allowed_delta_between_frames"] or sig_stack_tmp.shape[0] == 0: 
+        
+        # Add new axis for compatibility.
         time_stamp = time_stamp[np.newaxis,...]
-        timestamp_stack_tmp = np.append(timestamp_stack_tmp, time_stamp, axis=0)
+        sig = sig[np.newaxis,:] 
 
-        if img_stack_tmp.shape[0] == par["frames"]:
+        # Append only if images are strictly in series.
+        sig_stack_tmp = np.append(sig_stack_tmp, sig, axis=0)
+        timestamp_stack_tmp = np.append(timestamp_stack_tmp, time_stamp, axis=0)
+        state_stack_tmp = np.append(state_stack_tmp, state)
+
+        if state_stack_tmp.shape[0] == par["frames"]:
             
-            # Append to main array.
-            img_stack_tmp = img_stack_tmp[np.newaxis, ...]
-            img_stack = np.append(img_stack, img_stack_tmp, axis=0)
-            
+            # Append signal data to main array.
             sig_stack_tmp = sig_stack_tmp[np.newaxis, ...]
             sig_stack = np.append(sig_stack, sig_stack_tmp, axis=0)
 
             # Add timestamp to an array
             timestamp_stack_tmp = timestamp_stack_tmp[np.newaxis, ...]
             timestamp_stack = np.append(timestamp_stack, timestamp_stack_tmp, axis=0)
+            
+            # Append state to main array.
+            state_stack_tmp = state_stack_tmp[np.newaxis, ...]
+            state_stack = np.append(state_stack, state_stack_tmp, axis=0)
 
             # Reset stack
             timestamp_stack_tmp = np.zeros([0, par["ts_size"]])
             sig_stack_tmp = np.zeros([0, par["ts_size"]])
-            img_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
+            state_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
 
     else:
         # If not in series, reset stack.
         timestamp_stack_tmp = np.zeros([0, par["ts_size"]])
         sig_stack_tmp = np.zeros([0, par["ts_size"]])
-        img_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
+        state_stack_tmp = np.zeros(0)
 
 
-    return img_stack, img_stack_tmp, sig_stack, sig_stack_tmp, timestamp_stack, timestamp_stack_tmp, last_stamp
+    return state_stack, state_stack_tmp, sig_stack, sig_stack_tmp, timestamp_stack, timestamp_stack_tmp, last_stamp

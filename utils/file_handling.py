@@ -19,25 +19,21 @@ def get_file_name(par: dict) -> str:
     """
     Returns file name based on used parameters.
     """
-    trs_type_cp = par["trs_type"]
+    if par["max_images"] > 10000:
+        max_images = "_A"
+    else:
+        max_images = par["max_images"]
 
-    if trs_type_cp == "GAF":
-        trs_type_cp = par['trs_type_gaf']
-    
     file_name =f"{par['dataset_name']}""_" \
-                f"{trs_type_cp}""_" \
                 f"{par['step_in_mins']}""m_" \
                 f"{par['img_size']}""S" \
                 f"{par['frames']}""X_" \
                 f"{len(par['appliances'])}""A" \
-                f"{par['max_images']}""N_" \
+                f"{max_images}""N_" \
                 f"{par['selected_building']}""B"
-                    
-    if par["add_brightness"]:
-        file_name += "_BRIG"
 
-    if par["ts_save"]:
-        file_name += "_SRC-TS"
+    if par["state_save"]:
+        file_name += "_STATE"
 
     return file_name
 
