@@ -15,9 +15,10 @@ def print_parameters(par: dict) -> None:
         " using appliances: ", par['appliances'],"\n"
 
         " windows size in mins: "f"{par['step_in_mins']}","\n"
-        " image size in pixels: "f"{par['img_size']}","\n"
+        " ts size: "f"{par['ts_size']}","\n"
 
         " sample period: "f"{par['resample_period']}","\n"
+        " fill limit: "f"{par['fill_limit']}","\n" 
 
         " number if images that are stacked together and in series(series!): "f"{par['frames']}","\n"
         " allowed max delta between images  "f"{par['allowed_delta_between_frames']}","\n"
