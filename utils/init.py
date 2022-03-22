@@ -70,8 +70,5 @@ def param_setup(dataset: pd.DataFrame, par: dict) -> None:
     # When using all buildings parameter selected_building must be A.
     if par["multiple_buildings"]: par["selected_building"] = "A"
         
-    # Handle edge case for RECU.
-    par["org_img_size"] = par["img_size"]
-
     if par["fill_limit"] > (par["ts_size"] / 2):
          warnings.warn("Warning........... par['fill_limit'] is too large, it could resampling could result in invalid time series data.")

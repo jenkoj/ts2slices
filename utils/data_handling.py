@@ -68,9 +68,10 @@ def append_images(state: np.ndarray, state_stack: np.ndarray, state_stack_tmp: n
         # Append only if images are strictly in series.
         sig_stack_tmp = np.append(sig_stack_tmp, sig, axis=0)
         timestamp_stack_tmp = np.append(timestamp_stack_tmp, time_stamp, axis=0)
+
         state_stack_tmp = np.append(state_stack_tmp, state)
 
-        if state_stack_tmp.shape[0] == par["frames"]:
+        if sig_stack_tmp.shape[0] == par["frames"]:
             
             # Append signal data to main array.
             sig_stack_tmp = sig_stack_tmp[np.newaxis, ...]
@@ -87,7 +88,7 @@ def append_images(state: np.ndarray, state_stack: np.ndarray, state_stack_tmp: n
             # Reset stack
             timestamp_stack_tmp = np.zeros([0, par["ts_size"]])
             sig_stack_tmp = np.zeros([0, par["ts_size"]])
-            state_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
+            state_stack_tmp = np.zeros(0)
 
     else:
         # If not in series, reset stack.
