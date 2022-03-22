@@ -26,7 +26,7 @@ def get_file_name(par: dict) -> str:
 
     file_name =f"{par['dataset_name']}""_" \
                 f"{par['step_in_mins']}""m_" \
-                f"{par['img_size']}""S" \
+                f"{par['ts_size']}""S" \
                 f"{par['frames']}""X_" \
                 f"{len(par['appliances'])}""A" \
                 f"{max_images}""N_" \
