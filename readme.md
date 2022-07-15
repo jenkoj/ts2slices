@@ -1,24 +1,14 @@
 # Time Series Slicer for Energy Data
 
-Notebook uses [pyts](https://pyts.readthedocs.io) to transform time series image data to:
+The script is a fork from [ts2img]((https://github.com/jenkoj/ts2img).
+The slicing of time series was a bi-product of the trasfomation, so
+this scipt utilizes only the latter part. 
 
-* Gramian angular summation fields
-* Gramian angular difference fields
-* recurrence plots 
+Many parameters remain so that they dont break the script due to filenames.
+Simply igonore those.
+Imporatant parameters will be marked.
 
 For easier data handling [NILMTK](https://github.com/nilmtk/nilmtk) was used. 
-
-The converter offers a variety of parameters to set such as:
-
-* input time series window size
-* output image size
-* resample period
-* stacking n images as a video
-* adding brightness to the GAF images
-* choosing between Gramian angular fields or recurrence plots
-* using only a selected building
-* manually selecting the appliances
-* saving the source time series
 
 environment 
 
@@ -29,21 +19,6 @@ Works with all datasets supported by NILMTK. Tested on:
 * iAWE
 * REDD
 * ECO   
-
-# Example Output 
-
-Examples below are Gramian angle summation filed images transformed using UKDALE dataset over a 60-minute window.
-
-Computer monitor and washing machine examples:
-<p float="center">
-    <img src="/imgs/iawe-computer-gasf.png" width="250" />
-    <img src="/imgs/iawe-washm-gaf.png" width="250" />
-</p>
-
-Examples for selected appliances:
-<p float="center">
-    <img src="/imgs/gaf_matrix.png" width="600" />
-</p>
 
 # Install Instructions  
   
