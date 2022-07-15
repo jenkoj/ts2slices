@@ -4,10 +4,6 @@ The script is a fork from [ts2img](https://github.com/jenkoj/ts2img).
 The slicing of time series was a bi-product of the trasfomation, so
 this scipt utilizes only the latter part. 
 
-Many parameters remain so that they dont break the script due to filenames.
-Simply igonore those.
-Imporatant parameters will be marked.
-
 For easier data handling [NILMTK](https://github.com/nilmtk/nilmtk) was used. 
 
 environment 
