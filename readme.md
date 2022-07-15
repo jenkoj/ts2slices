@@ -1,6 +1,6 @@
 # Time Series Slicer for Energy Data
 
-The script is a fork from [ts2img]((https://github.com/jenkoj/ts2img).
+The script is a fork from [ts2img](https://github.com/jenkoj/ts2img).
 The slicing of time series was a bi-product of the trasfomation, so
 this scipt utilizes only the latter part. 
 
